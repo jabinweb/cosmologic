@@ -1,8 +1,11 @@
 import './globals.css';
+import '@/styles/playground.css';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import { ThemeProvider } from "@/components/theme-provider";
-import { Header } from "@/components/sections/header";
+import { AuthProvider } from "@/components/auth-provider";
+import { SessionProvider } from '@/components/session-provider';
+import { SubscriptionProvider } from '@/components/subscription-provider';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -31,8 +34,13 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <Header />
-          {children}
+          <SessionProvider>
+            <SubscriptionProvider>
+              <AuthProvider>
+                {children}
+              </AuthProvider>
+            </SubscriptionProvider>
+          </SessionProvider>
         </ThemeProvider>
       </body>
     </html>
