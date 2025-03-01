@@ -5,6 +5,8 @@ import { AssessmentStatusView } from '@/components/learning/assessment-status';
 import { redirect } from 'next/navigation';
 import { prisma } from '@/lib/prisma';
 
+export const dynamic = 'force-dynamic';
+
 export default async function LearningHubPage() {
   const user = await getAuthUser();
   if (!user) redirect('/login');

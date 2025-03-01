@@ -9,6 +9,9 @@ interface PageProps {
   };
 }
 
+// Add this export to make the route dynamic
+export const dynamic = 'force-dynamic';
+
 export default async function AssessmentPage({ searchParams }: PageProps) {
   const user = await getAuthUser();
   if (!user) {

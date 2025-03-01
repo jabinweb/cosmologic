@@ -65,6 +65,7 @@ export interface User {
   email: string;
   role: Role;
   avatar?: string;
+  isAdmin?: boolean;
   emailVerified?: Date;
   profile?: {
     id: string;
