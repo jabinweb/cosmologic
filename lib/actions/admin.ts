@@ -112,3 +112,35 @@ export async function deleteForum(forumId: string) {
     where: { id: forumId },
   });
 }
+
+export async function getAllUsers() {
+  'use server';
+  
+  try {
+    return await prisma.user.findMany({
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        role: true,
+        createdAt: true,
+        profile: {
+          select: {
+            assessmentData: true
+          }
+        },
+        _count: {
+          select: {
+            enrollments: true
+          }
+        }
+      },
+      orderBy: {
+        createdAt: 'desc'
+      }
+    });
+  } catch (error) {
+    console.error('Error fetching users:', error);
+    return [];
+  }
+}
