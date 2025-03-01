@@ -184,13 +184,13 @@ model Profile {
 }
 
 model Forum {
-  id          String   @id @default(cuid())
+  id          String    @id @default(cuid())
   name        String
   description String?
-  slug        String   @unique
+  slug        String    @unique
   topics      Topic[]
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @default(now())
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @default(now())
 }
 
 model Topic {
