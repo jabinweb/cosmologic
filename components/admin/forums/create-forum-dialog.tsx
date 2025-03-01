@@ -19,15 +19,12 @@ export function CreateForumDialog() {
   const [open, setOpen] = useState(false);
   const { toast } = useToast();
   
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const formData = new FormData(e.currentTarget);
-    
+  const handleSubmit = async (data: FormData) => {
     try {
       await createForum({
-        name: formData.get('name') as string,
-        description: formData.get('description') as string,
-        slug: formData.get('slug') as string,
+        name: data.get('name') as string,
+        description: data.get('description') as string,
+        slug: data.get('slug') as string,
       });
       
       toast({
@@ -57,7 +54,7 @@ export function CreateForumDialog() {
         <DialogHeader>
           <DialogTitle>Create New Forum</DialogTitle>
         </DialogHeader>
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={(e) => { e.preventDefault(); handleSubmit(new FormData(e.currentTarget)); }} className="space-y-4">
           <div className="space-y-2">
             <label>Name</label>
             <Input name="name" required />

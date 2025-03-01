@@ -1,3 +1,5 @@
+'use server';
+
 import { prisma } from "@/lib/prisma";
 import { Role } from "@prisma/client";
 
@@ -114,8 +116,6 @@ export async function deleteForum(forumId: string) {
 }
 
 export async function getAllUsers() {
-  'use server';
-  
   try {
     return await prisma.user.findMany({
       select: {
