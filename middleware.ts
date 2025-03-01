@@ -46,7 +46,7 @@ export async function middleware(request: NextRequest) {
       // Check subscription for protected paths
       if (protectedPaths.some(path => pathname.startsWith(path))) {
         try {
-          const user = await verifyJWT(token);
+          const user = await verifyJWT(token) as { userId: string };
           
           // Check subscription
           const subscription = await prismaEdge.subscription.findFirst({

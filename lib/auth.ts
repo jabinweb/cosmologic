@@ -2,8 +2,9 @@ import { cookies } from 'next/headers';
 import { verifyJWT } from './jwt';
 import { prisma } from './prisma';
 import logger from './logger';
+import { User } from '@/types';
 
-export async function getAuthUser() {
+export async function getAuthUser(): Promise<User | null> {
   try {
     const token = (await cookies()).get('token')?.value;
     

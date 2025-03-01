@@ -1,16 +1,18 @@
-import { Header } from "@/components/sections/header";
+import { Header } from "@/components/sections/header/index";
 import { Footer } from "@/components/sections/footer";
 
-export default function Layout({
+export default function MainLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  return ( 
-    <>
-        <Header />
+  return (
+    <div className="flex flex-col min-h-screen">
+      <Header /> {/* Your existing header */}
+      <main className="flex-1">
         {children}
-        <Footer />
-    </>
+      </main>
+      <Footer /> {/* Your existing footer */}
+    </div>
   );
 }

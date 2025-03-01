@@ -25,3 +25,11 @@ export function formatDate(date: string | Date | null | undefined): string {
     return 'Invalid date';
   }
 }
+
+export function getCourseTags(course: { tags: string }): string[] {
+  try {
+    return JSON.parse(course.tags);
+  } catch {
+    return [];
+  }
+}

@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { useSession } from '@/components/session-provider';
+import { useSession } from '@/providers/session-provider';
 import { prisma } from '@/lib/prisma';
 
 export async function GET() {

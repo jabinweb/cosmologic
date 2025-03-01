@@ -2,7 +2,7 @@
 
 import { DashboardSidebar } from "@/components/dashboard/sidebar";
 import { SubscriptionInfo } from "@/components/dashboard/subscription-info";
-import { useSubscription } from '@/components/subscription-provider';
+import { useSubscription } from '@/providers/subscription-provider';
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
 import Link from "next/link";

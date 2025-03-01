@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useSession } from "@/components/session-provider";
+import { useSession } from "@/providers/session-provider";
 import { AdminSidebar } from "@/components/admin/sidebar";
 import { Loader2 } from "lucide-react";
 

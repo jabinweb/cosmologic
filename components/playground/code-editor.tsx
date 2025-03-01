@@ -1,7 +1,7 @@
 'use client';
 
 import Editor from '@monaco-editor/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 interface CodeEditorProps {
   initialCode?: string;
@@ -18,6 +18,21 @@ export function CodeEditor({
 }: CodeEditorProps) {
   const [code, setCode] = useState(initialCode);
 
+  useEffect(() => {
+    setCode(initialCode);
+  }, [initialCode, language]);
+
+  const getEditorLanguage = (lang: string) => {
+    switch (lang) {
+      case 'html':
+        return 'html';
+      case 'javascript':
+        return 'javascript';
+      default:
+        return 'javascript';
+    }
+  };
+
   const handleEditorChange = (value: string = '') => {
     setCode(value);
     onChange?.(value);
@@ -28,8 +43,8 @@ export function CodeEditor({
       <Editor
         height="100%"
         width="100%"
-        defaultLanguage={language}
-        defaultValue={initialCode}
+        language={getEditorLanguage(language)}
+        value={code}
         theme={theme === 'dark' ? 'vs-dark' : 'light'}
         onChange={handleEditorChange}
         options={{
@@ -40,6 +55,7 @@ export function CodeEditor({
           scrollBeyondLastLine: false,
           automaticLayout: true,
           padding: { top: 16, bottom: 16 },
+          tabSize: 2,
         }}
       />
     </div>

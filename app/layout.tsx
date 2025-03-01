@@ -1,11 +1,11 @@
-import './globals.css';
+import '@/styles/globals.css';
 import '@/styles/playground.css';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
-import { ThemeProvider } from "@/components/theme-provider";
-import { AuthProvider } from "@/components/auth-provider";
-import { SessionProvider } from '@/components/session-provider';
-import { SubscriptionProvider } from '@/components/subscription-provider';
+import { ThemeProvider } from "@/providers/theme-provider";
+import { AuthProvider } from "@/providers/auth-provider";
+import { SessionProvider } from '@/providers/session-provider';
+import { SubscriptionProvider } from '@/providers/subscription-provider';
 
 const inter = Inter({ subsets: ['latin'] });
 

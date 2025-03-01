@@ -15,27 +15,33 @@ enum Role {
 }
 
 model User {
-  id              String         @id @default(cuid())
-  email           String         @unique
-  password        String
-  name            String
-  role            Role           @default(STUDENT)
-  avatar          String?
-  enrollments     Enrollment[]
-  parentId        String? // For students linked to parents
-  parent          User?          @relation("ParentToStudent", fields: [parentId], references: [id], onDelete: SetNull)
-  children        User[]         @relation("ParentToStudent")
-  specialization  String         @default("[]") // Store as JSON string
-  bio             String?
-  experience      Int?
-  phone           String?
-  grade           String?
-  age             Int?
-  createdAt       DateTime       @default(now())
-  updatedAt       DateTime       @updatedAt
-  emailVerified   DateTime?
-  coursesTeaching Course[]       @relation("InstructorCourses")
-  subscriptions   Subscription[]
+  id                     String         @id @default(cuid())
+  email                  String         @unique
+  password               String
+  name                   String
+  role                   Role           @default(STUDENT)
+  avatar                 String?
+  enrollments            Enrollment[]
+  parentId               String? // For students linked to parents
+  parent                 User?          @relation("ParentToStudent", fields: [parentId], references: [id], onDelete: SetNull)
+  children               User[]         @relation("ParentToStudent")
+  specialization         String         @default("[]") // Store as JSON string
+  bio                    String?
+  experience             Int?
+  phone                  String?
+  grade                  String?
+  age                    Int?
+  createdAt              DateTime       @default(now())
+  updatedAt              DateTime       @updatedAt
+  emailVerified          DateTime?
+  coursesTeaching        Course[]       @relation("InstructorCourses")
+  subscriptions          Subscription[]
+  profile                Profile?
+  topics                 Topic[]
+  posts                  Post[]
+  comments               Comment[]
+  notifications          Notification[] @relation("UserNotifications")
+  notificationsTriggered Notification[] @relation("NotificationActors")
 
   @@index([parentId])
 }
@@ -47,6 +53,7 @@ model Course {
   mode         String
   price        Float
   features     String       @default("[]") // Store as JSON string
+  tags         String       @default("[]") // Add this field for course tags
   level        String
   instructorId String
   instructor   User         @relation("InstructorCourses", fields: [instructorId], references: [id], onDelete: Cascade)
@@ -66,7 +73,7 @@ model Enrollment {
   payment   Payment? @relation(fields: [paymentId], references: [id], onDelete: SetNull)
   status    String   @default("pending")
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  updatedAt DateTime @default(now())
   paymentId String?
 
   @@index([userId])
@@ -155,4 +162,111 @@ model PasswordReset {
   token     String   @unique
   expires   DateTime
   createdAt DateTime @default(now())
+}
+
+model Profile {
+  id                  String    @id @default(cuid())
+  userId              String    @unique
+  user                User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  bio                 String?
+  assessmentData      String?   // Current assessment
+  assessmentStats     String?   // Store assessment history and stats as JSON
+  courseProgress      String?   // Store course progress as JSON
+  achievements        String    @default("[]")
+  socialLinks         String?   @default("{}")
+  skills              String    @default("[]")
+  posts               Post[]
+  comments            Comment[]
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @default(now())
+
+  @@index([userId])
+}
+
+model Forum {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  slug        String   @unique
+  topics      Topic[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now())
+}
+
+model Topic {
+  id        String   @id @default(cuid())
+  title     String
+  content   String
+  forumId   String
+  forum     Forum    @relation(fields: [forumId], references: [id], onDelete: Cascade)
+  authorId  String
+  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  posts     Post[]
+  views     Int      @default(0)
+  isPinned  Boolean  @default(false)
+  isLocked  Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  @@index([forumId])
+  @@index([authorId])
+}
+
+model Post {
+  id            String         @id @default(cuid())
+  content       String
+  topicId       String
+  topic         Topic          @relation(fields: [topicId], references: [id], onDelete: Cascade)
+  authorId      String
+  author        User           @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  profileId     String
+  profile       Profile        @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  comments      Comment[]
+  likes         Int            @default(0)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @default(now())
+  notifications Notification[] // Add this line
+
+  @@index([topicId])
+  @@index([authorId])
+  @@index([profileId])
+}
+
+model Comment {
+  id        String    @id @default(cuid())
+  content   String
+  postId    String
+  post      Post      @relation(fields: [postId], references: [id], onDelete: Cascade)
+  authorId  String
+  author    User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  profileId String
+  profile   Profile   @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  parentId  String?
+  parent    Comment?  @relation("CommentReplies", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  replies   Comment[] @relation("CommentReplies")
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @default(now())
+
+  @@index([postId])
+  @@index([authorId])
+  @@index([profileId])
+  @@index([parentId])
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  type      String // MENTION, REPLY, etc.
+  read      Boolean  @default(false)
+  postId    String?
+  actorId   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+  user      User     @relation("UserNotifications", fields: [userId], references: [id], onDelete: Cascade)
+  actor     User     @relation("NotificationActors", fields: [actorId], references: [id], onDelete: Cascade)
+  post      Post?    @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([actorId])
+  @@index([postId])
 }

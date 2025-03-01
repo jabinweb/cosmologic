@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
 import { toast } from '@/hooks/use-toast';
-import { useSession } from '@/components/session-provider';
+import { useSession } from '@/providers/session-provider';
 import { PlanType, RazorpayPlans } from '@/types';
 
 interface CheckoutButtonProps {

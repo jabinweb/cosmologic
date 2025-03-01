@@ -11,9 +11,11 @@ import {
   BarChart,
   LogOut,
   BadgeDollarSign,
+  MessageSquare,
+  Shield,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useAuth } from "@/components/auth-provider";
+import { useAuth } from "@/providers/auth-provider";
 
 const menuItems = [
   {
@@ -25,6 +27,16 @@ const menuItems = [
     title: "Users",
     href: "/admin/users",
     icon: Users,
+  },
+  {
+    title: "Forums",
+    href: "/admin/forums",
+    icon: MessageSquare,
+  },
+  {
+    title: "Moderation",
+    href: "/admin/moderation",
+    icon: Shield,
   },
   {
     title: "Plans",

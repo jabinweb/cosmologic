@@ -57,3 +57,21 @@ export interface PlanFeatures {
 export interface RazorpayPlans {
   [key: string]: RazorpayPlan;
 }
+
+export interface User {
+  id: string;
+  name: string;
+  email: string;
+  role: Role;
+  avatar?: string;
+  emailVerified?: Date;
+  profile?: {
+    id: string;
+    bio?: string;
+    assessmentCompleted?: boolean;
+    assessmentData?: string;
+    achievements: string;
+    skills: string;
+    socialLinks: string;
+  };
+}

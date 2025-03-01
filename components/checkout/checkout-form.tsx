@@ -16,7 +16,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useAuth } from "@/components/auth-provider";
+import { useAuth } from "@/providers/auth-provider";
 import { toast } from "@/hooks/use-toast";
 import { CouponInput } from "./coupon-input";
 import { PlanType } from "@/types";
