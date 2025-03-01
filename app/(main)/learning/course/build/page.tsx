@@ -5,11 +5,15 @@ import { redirect } from 'next/navigation';
 import { getAuthUser } from '@/lib/auth';
 import { getUserCourseProgress } from '@/lib/actions/learning';
 
+// Add these exports to make the route dynamic
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 interface PageProps {
-  searchParams: Promise<{ 
+  searchParams: { 
     topic?: string; 
     level?: string;
-  }>;
+  };
 }
 
 export default async function CourseBuildPage({
@@ -18,7 +22,7 @@ export default async function CourseBuildPage({
   const user = await getAuthUser();
   if (!user) redirect('/login');
 
-  const params = await searchParams;
+  const params = searchParams;
   const topic = String(params?.topic || '');
   const level = String(params?.level || '');
 

@@ -147,17 +147,15 @@ export async function getUserCourseProgress(userId: string, courseId: string) {
   try {
     const profile = await prisma.profile.findUnique({
       where: { userId },
-      select: { 
-        courseProgress: true 
-      }
+      select: { courseProgress: true }
     });
 
     if (!profile?.courseProgress) return null;
 
-    const allProgress = JSON.parse(profile.courseProgress);
-    return allProgress[courseId] || null;
+    const progress = JSON.parse(profile.courseProgress);
+    return progress[courseId] || null;
   } catch (error) {
-    console.error('Failed to get course progress:', error);
+    console.error('Error getting course progress:', error);
     return null;
   }
 }
