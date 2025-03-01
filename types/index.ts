@@ -1,3 +1,4 @@
+import { Role } from '@prisma/client';
 export type PlanType = "basic" | "pro" | "premium";
 
 export interface Feature {

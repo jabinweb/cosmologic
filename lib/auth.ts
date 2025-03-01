@@ -1,10 +1,12 @@
 import { cookies } from 'next/headers';
+import { cache } from 'react';
 import { verifyJWT } from './jwt';
 import { prisma } from './prisma';
 import logger from './logger';
-import { User } from '@/types';
+import { User } from '@/types/user';
+import { Role } from '@prisma/client';
 
-export async function getAuthUser(): Promise<User | null> {
+export const getAuthUser = cache(async (): Promise<User | null> => {
   try {
     const token = (await cookies()).get('token')?.value;
     
@@ -19,7 +21,9 @@ export async function getAuthUser(): Promise<User | null> {
     }
 
     const user = await prisma.user.findUnique({
-      where: { id: payload.userId },
+      where: { 
+        id: payload.userId 
+      },
       select: {
         id: true,
         email: true,
@@ -29,12 +33,19 @@ export async function getAuthUser(): Promise<User | null> {
       }
     });
 
-    return user;
+    if (!user) return null;
+
+    // Transform the data to match User type
+    return {
+      ...user,
+      avatar: user.avatar || undefined,
+      isAdmin: user.role === Role.ADMIN
+    };
   } catch (error) {
     logger.error('Auth check failed:', error);
     return null;
   }
-}
+});
 
 export async function getUserFromToken(token: string) {
   try {
@@ -74,3 +85,5 @@ export function isStudent(user: any) {
 export function isParent(user: any) {
   return user?.role === 'PARENT';
 }
+
+export const revalidate = 0;
